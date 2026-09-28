@@ -1,0 +1,89 @@
+import { NextRequest } from "next/server";
+import { lookupBadgeForMint } from "@/lib/card/badge";
+import { buildShareCardModel } from "@/lib/card/model";
+import { renderShareCardPng } from "@/lib/card/render";
+import { loadScanForCard } from "@/lib/card/store";
+
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+export const runtime = "nodejs";
+
+function normalizeMintParam(raw: string): string {
+  return decodeURIComponent(raw).replace(/\.png$/i, "").trim();
+}
+
+function publicOrigin(request: NextRequest): string {
+  const env = process.env.NEXT_PUBLIC_SCAN_ORIGIN || process.env.SCAN_PUBLIC_ORIGIN;
+  if (env) return env.replace(/\/$/, "");
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+  const proto = request.headers.get("x-forwarded-proto") || "https";
+  if (host) return `${proto}://${host}`;
+  return "https://scan.cyre.dev";
+}
+
+function readScanId(request: NextRequest): string | null {
+  const s = request.nextUrl.searchParams.get("s") || request.nextUrl.searchParams.get("scanId");
+  const id = (s || "").trim();
+  return id.length >= 8 ? id : null;
+}
+
+/**
+ * GET /api/card/<mint>.png?s=<scanId>
+ * Path mint is lookup key; optional ?s= pins the share-card snapshot so the
+ * PNG matches the grade/score in the share text. Free-text query params are
+ * never painted onto the card.
+ */
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ mint: string }> },
+) {
+  const { mint: raw } = await context.params;
+  const mint = normalizeMintParam(raw);
+  if (!mint || mint.length < 32) {
+    return new Response("Not found", { status: 404 });
+  }
+
+  const scanId = readScanId(request);
+
+  try {
+    const report = await loadScanForCard(mint, scanId);
+    const badge = await lookupBadgeForMint(report.token.address);
+    const model = buildShareCardModel(report, badge, {
+      publicOrigin: publicOrigin(request),
+    });
+    const png = await renderShareCardPng(model);
+
+    // Snapshot URLs are content-addressed by scanId — cache longer.
+    // Mint-only URLs stay short so a rescan cannot serve a stale grade.
+    const cache = scanId
+      ? "public, max-age=86400, s-maxage=86400, stale-while-revalidate=3600"
+      : "public, max-age=60, s-maxage=60, stale-while-revalidate=30";
+
+    return new Response(new Uint8Array(png), {
+      status: 200,
+      headers: {
+        "Content-Type": "image/png",
+        "Cache-Control": cache,
+        "X-Guardian-Card": model.grade,
+        "X-Guardian-Card-Mint": model.mint,
+        "X-Guardian-Card-Scan": report.scanId || "",
+        "X-Guardian-Card-Badge": model.showMedallion ? "VALID" : model.badgeStatus || "NONE",
+        "Content-Length": String(png.length),
+      },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Card render failed";
+    return new Response(message, {
+      status: 500,
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  }
+}
+
+export async function HEAD(
+  request: NextRequest,
+  context: { params: Promise<{ mint: string }> },
+) {
+  const res = await GET(request, context);
+  return new Response(null, { status: res.status, headers: res.headers });
+}
