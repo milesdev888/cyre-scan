@@ -39,7 +39,7 @@ export async function generateMetadata({
 
   if (!address) {
     return {
-      title: "Guardian — Multichain Scan",
+      title: "Cyre — Multichain Scan",
       description:
         "Paste-first token scanner for Solana, Ethereum, Base, Arbitrum, Robinhood Chain, and XRPL.",
     };
@@ -65,8 +65,8 @@ export async function generateMetadata({
     ? `${origin}/app?address=${encodeURIComponent(address)}&s=${encodeURIComponent(scanId)}`
     : `${origin}/app?address=${encodeURIComponent(address)}`;
   const ogImage = cardOgUrl(origin, address, scanId || null);
-  const title = "Guardian scan report";
-  const description = `${gradeLabel}Scanned with Guardian — grades and on-chain patterns, not a verdict.`;
+  const title = "Cyre scan report";
+  const description = `${gradeLabel}Scanned with Cyre — grades and on-chain patterns, not a verdict.`;
 
   return {
     title,
@@ -74,7 +74,7 @@ export async function generateMetadata({
     alternates: { canonical: reportUrl },
     openGraph: {
       type: "website",
-      siteName: "Guardian",
+      siteName: "Cyre",
       title,
       description,
       url: reportUrl,
