@@ -19,7 +19,7 @@ export function SiteHeader() {
           <span className="flex size-8 items-center justify-center rounded-md border border-primary/40 bg-primary/10 text-primary">
             <Shield className="size-4" />
           </span>
-          <span className="font-heading text-lg tracking-tight">Guardian</span>
+          <span className="font-heading text-lg tracking-tight">Cyre</span>
           <span className="hidden text-xs tracking-[0.18em] text-muted-foreground uppercase sm:inline">
             Multichain Scan
           </span>

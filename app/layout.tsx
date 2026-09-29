@@ -21,7 +21,7 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Guardian — Multichain Scan",
+  title: "Cyre — Multichain Scan",
   description:
     "Paste-first token scanner for Solana, Ethereum, Base, Arbitrum, Robinhood Chain, and XRPL. Grades and patterns, not verdicts.",
 };
