@@ -138,7 +138,7 @@ function EmptyIntro() {
         },
         {
           title: "XRPL is not EVM",
-          body: "No bytecode. Guardian reads issuer flags, TransferRate, trust lines, Domain.toml, and XLS-30 AMM pools from public nodes.",
+          body: "No bytecode. Cyre reads issuer flags, TransferRate, trust lines, Domain.toml, and XLS-30 AMM pools from public nodes.",
         },
         {
           title: "Agents pay over x402",
