@@ -28,13 +28,12 @@ export function ScanForm({
     <div className="mx-auto w-full min-w-0 max-w-5xl px-4 pb-[max(5rem,calc(3.5rem+env(safe-area-inset-bottom)))] [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))]">
       <div className="mb-8 space-y-3">
         <p className="text-xs tracking-[0.22em] text-primary uppercase">Paste first</p>
-        <h1 className="font-heading text-[2rem] leading-tight text-pretty sm:text-5xl">
-          Scan a contract.
-          <br className="sm:hidden" /> Read grades and patterns.
+        <h1 className="font-heading text-[1.875rem] leading-[1.15] tracking-tight text-pretty sm:text-5xl sm:leading-tight">
+          Scan a contract. Read grades and patterns.
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base">
           Paste a Solana mint, 0x contract, or XRPL r-address. No chain dropdown —
-          Cyre detects the family. Grades and patterns, not a verdict.
+          Cyre detects the family. You get grades and patterns, not a verdict.
         </p>
       </div>
 
