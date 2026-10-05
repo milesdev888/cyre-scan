@@ -25,7 +25,7 @@ export function ScanForm({
       : null;
 
   return (
-    <div className="mx-auto w-full max-w-5xl">
+    <div className="mx-auto w-full min-w-0 max-w-5xl px-4 pb-8 [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))]">
       <div className="mb-8 space-y-3">
         <p className="text-xs tracking-[0.22em] text-primary uppercase">Paste first</p>
         <h1 className="font-heading text-4xl leading-tight text-balance sm:text-5xl">

@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${sans.variable} ${heading.variable} ${mono.variable} dark h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-background text-foreground">
+      <body className="flex min-h-full max-w-[100vw] flex-col overflow-x-clip bg-background text-foreground">
         <TooltipProvider>
           <SiteHeader />
           <main className="flex-1">{children}</main>
