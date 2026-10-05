@@ -25,15 +25,16 @@ export function ScanForm({
       : null;
 
   return (
-    <div className="mx-auto w-full min-w-0 max-w-5xl px-4 pb-8 [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))]">
+    <div className="mx-auto w-full min-w-0 max-w-5xl px-4 pb-[max(5rem,calc(3.5rem+env(safe-area-inset-bottom)))] [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))]">
       <div className="mb-8 space-y-3">
         <p className="text-xs tracking-[0.22em] text-primary uppercase">Paste first</p>
-        <h1 className="font-heading text-4xl leading-tight text-balance sm:text-5xl">
-          Scan the contract. Read the patterns.
+        <h1 className="font-heading text-[2rem] leading-tight text-pretty sm:text-5xl">
+          Scan a contract.
+          <br className="sm:hidden" /> Read grades and patterns.
         </h1>
-        <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-          No chain dropdown. Paste a mint, 0x address, or XRPL classic address starting with r. Base58 is
-          Solana. 0x plus 40 hex is EVM. r... with a valid checksum is XRPL.
+        <p className="max-w-2xl text-sm leading-relaxed text-pretty text-muted-foreground sm:text-base">
+          Paste a Solana mint, 0x contract, or XRPL r-address. No chain dropdown —
+          Cyre detects the family. Grades and patterns, not a verdict.
         </p>
       </div>
 
@@ -44,7 +45,7 @@ export function ScanForm({
             type="submit"
             className={cn(
               buttonVariants({ variant: "default" }),
-              "h-14 shrink-0 rounded-2xl px-8 text-base sm:min-w-36",
+              "h-14 min-h-11 w-full shrink-0 rounded-2xl px-8 text-base sm:w-auto sm:min-w-36",
             )}
           >
             Scan
@@ -61,7 +62,7 @@ export function ScanForm({
         <ChainBillboard />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 min-w-0">
         {result?.kind === "error" ? (
           <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {result.error}
@@ -71,7 +72,7 @@ export function ScanForm({
           <IssuancePicker address={result.address} issuances={result.issuances} message={result.message} />
         ) : null}
         {result?.kind === "report" && activeReport ? (
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-4">
             <ReportActionBar
               key={`${activeReport.token.address}:${activeReport.scanId ?? ""}:${activeReport.token.twitterHandle ?? ""}`}
               mint={activeReport.token.address}
@@ -100,8 +101,8 @@ function IssuancePicker({
   message: string;
 }) {
   return (
-    <div className="rounded-xl border border-border/70 bg-card/60 p-4">
-      <h2 className="font-heading text-xl">This issuer lists multiple currencies</h2>
+    <div className="min-w-0 rounded-xl border border-border/70 bg-card/60 p-4">
+      <h2 className="font-heading text-xl text-pretty">This issuer lists multiple currencies</h2>
       <p className="mt-2 text-sm text-muted-foreground">{message}</p>
       <p className="mt-1 font-mono text-xs break-all text-muted-foreground">{address}</p>
       <div className="mt-4 flex flex-wrap gap-2">
@@ -115,7 +116,7 @@ function IssuancePicker({
               href={`/app?${params.toString()}`}
               className={cn(
                 buttonVariants({ variant: "outline" }),
-                "h-auto min-h-12 flex-col items-start rounded-xl px-3 py-2",
+                "h-auto min-h-11 flex-col items-start rounded-xl px-3 py-2",
               )}
             >
               <span className="text-sm font-medium">{row.display}</span>
@@ -134,7 +135,7 @@ function EmptyIntro() {
       {[
         {
           title: "One paste box, six chains",
-          body: "Solana, Ethereum, Base, Arbitrum, Robinhood Chain, and XRPL. The row under the box is a billboard - it never gates the scan.",
+          body: "Solana, Ethereum, Base, Arbitrum, Robinhood Chain, and XRPL. The row under the box is a billboard — it never gates the scan.",
         },
         {
           title: "XRPL is not EVM",
@@ -145,9 +146,9 @@ function EmptyIntro() {
           body: "Every check is mirrored at /api/scan/evm/{chain}/{address}, /api/scan/solana/{address}, and /api/scan/xrpl/{issuer}.",
         },
       ].map((item) => (
-        <div key={item.title} className="rounded-xl border border-border/70 bg-card/50 p-4">
-          <h2 className="font-heading text-lg">{item.title}</h2>
-          <p className="mt-2 text-sm text-muted-foreground">{item.body}</p>
+        <div key={item.title} className="min-w-0 rounded-xl border border-border/70 bg-card/50 p-4">
+          <h2 className="font-heading text-lg text-pretty">{item.title}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">{item.body}</p>
         </div>
       ))}
     </div>

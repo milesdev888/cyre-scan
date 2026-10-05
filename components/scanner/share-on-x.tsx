@@ -80,14 +80,14 @@ export function ShareOnXButton({
   const shareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
       <a
         href={shareHref}
         target="_blank"
         rel="noreferrer"
         className={cn(
           buttonVariants({ variant: emphasis === "primary" ? "default" : "outline" }),
-          "h-9 rounded-xl px-3 text-xs",
+          "inline-flex h-11 min-h-11 w-full items-center justify-center rounded-xl px-3 text-xs sm:w-auto",
           emphasis === "primary" ? "font-semibold" : null,
         )}
       >
@@ -99,7 +99,7 @@ export function ShareOnXButton({
           aria-pressed={tagOn}
           onClick={() => setTagOn((v) => !v)}
           className={cn(
-            "h-9 rounded-xl border px-3 text-xs transition-colors",
+            "inline-flex h-11 min-h-11 w-full items-center justify-center rounded-xl border px-3 text-xs transition-colors sm:w-auto",
             tagOn
               ? "border-primary/50 bg-primary/15 text-primary"
               : "border-border bg-secondary/40 text-muted-foreground hover:text-foreground",
