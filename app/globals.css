@@ -121,15 +121,19 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    overflow-x: clip;
+    max-width: 100%;
+  }
   body {
     @apply bg-background text-foreground;
+    overflow-x: clip;
+    max-width: 100%;
     background-image:
       radial-gradient(1200px 560px at 8% -12%, oklch(0.3 0.05 155 / 0.55), transparent 55%),
       radial-gradient(900px 420px at 100% 0%, oklch(0.34 0.06 92 / 0.14), transparent 45%);
     background-attachment: fixed;
-  }
-  html {
-    @apply font-sans;
   }
 }
 

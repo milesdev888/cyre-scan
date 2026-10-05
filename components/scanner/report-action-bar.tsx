@@ -82,7 +82,7 @@ export function ReportActionBar({
       data-testid="get-verified"
       className={cn(
         buttonVariants({ variant: qualifyingBuy ? "default" : "outline" }),
-        "h-9 rounded-xl px-4 text-xs font-semibold no-underline",
+        "inline-flex h-11 min-h-11 w-full items-center justify-center rounded-xl px-4 text-xs font-semibold no-underline sm:w-auto",
         qualifyingBuy
           ? "border border-[#c9a227]/40 bg-[#c9a227] text-[#0b1210] hover:bg-[#d4b03a]"
           : "border-border bg-secondary/40 text-foreground hover:bg-secondary/70",
@@ -108,7 +108,10 @@ export function ReportActionBar({
   );
 
   return (
-    <div className="flex flex-wrap items-center gap-2" data-testid="report-action-bar">
+    <div
+      className="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center"
+      data-testid="report-action-bar"
+    >
       {badged ? (
         <>{shareBtn}</>
       ) : (

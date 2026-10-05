@@ -19,7 +19,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
     redirect(`/app?address=${encodeURIComponent(address)}${suffix}`);
   }
   return (
-    <div className="px-4 py-10 sm:py-16">
+    <div className="py-10 sm:py-16">
       <ScanForm address="" result={null} />
     </div>
   );

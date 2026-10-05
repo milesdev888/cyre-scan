@@ -62,7 +62,7 @@ export function ScanResultView({
     result.reports.find((item) => item.chain.id === activeChain) ?? result.reports[0];
   if (!report) return null;
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <PresenceBar
         presence={result.presence}
         family={result.family}
@@ -87,7 +87,7 @@ function PresenceBar({
 }) {
   if (family === "solana" || family === "xrpl") return null;
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex min-w-0 flex-wrap gap-2">
       {presence.map((row) => {
         const selected = row.chainId === active;
         const href = row.exists
@@ -95,7 +95,7 @@ function PresenceBar({
           : undefined;
         const className = cn(
           buttonVariants({ variant: selected ? "default" : "outline" }),
-          "h-10 rounded-xl px-3 text-xs",
+          "h-11 min-h-11 rounded-xl px-3 text-xs",
           !row.exists && "pointer-events-none opacity-50",
         );
         if (!href) {
@@ -124,11 +124,11 @@ function CheckCard({ item, lpTier }: { item: Check; lpTier?: LpTier | null }) {
   const tone = isLp ? lockToneFromTier(tier, item.grade) : null;
 
   return (
-    <div className="flex gap-3 rounded-xl border border-border/80 bg-card/60 p-3 sm:p-4">
+    <div className="flex min-w-0 gap-3 rounded-xl border border-border/80 bg-card/60 p-3 sm:p-4">
       <GradeMark grade={item.grade} size="sm" className="mt-0.5 shrink-0" />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-2">
-          <h3 className="font-medium">{item.title}</h3>
+          <h3 className="font-medium text-pretty break-words">{item.title}</h3>
           <span className="text-xs text-muted-foreground">
             grade {item.grade} · {item.status}
           </span>
@@ -149,14 +149,20 @@ function CheckCard({ item, lpTier }: { item: Check; lpTier?: LpTier | null }) {
             </span>
           ) : null}
         </div>
-        <p className="mt-1 text-sm">{item.summary}</p>
-        <p className="mt-1 text-xs text-muted-foreground">{item.detail}</p>
+        <p className="mt-1 text-sm text-pretty break-words">{item.summary}</p>
+        <p className="mt-1 text-xs text-pretty break-words text-muted-foreground">{item.detail}</p>
       </div>
     </div>
   );
 }
 
+/** Rows with no DEX / liquidity / age render as "— — unknown age" — hide them. */
+function copycatHasData(row: GuardianReport["copycats"][number]) {
+  return row.dex != null || row.liquidityUsd != null || row.createdAt != null;
+}
+
 export function ReportView({ report }: { report: GuardianReport }) {
+  const copycatsWithData = report.copycats.filter(copycatHasData);
   const concentration = report.concentration;
   const lpTier = report.lp?.tier ?? null;
   const ageDays = readAgeDays(report.checks);
@@ -164,13 +170,13 @@ export function ReportView({ report }: { report: GuardianReport }) {
   const gradeAccent = GRADE_HEX[report.grade] ?? GRADE_HEX.U;
 
   return (
-    <div className="relative space-y-6 pb-16">
+    <div className="relative min-w-0 space-y-6 pb-28">
       <BadgeSealCorner mint={report.token.address} />
-      <Card className="border-border/80 bg-card/80">
+      <Card className="min-w-0 overflow-hidden border-border/80 bg-card/80">
         <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex gap-4">
-            <GradeMark grade={report.grade} size="lg" labeled />
-            <div>
+          <div className="flex min-w-0 gap-3 sm:gap-4">
+            <GradeMark grade={report.grade} size="lg" labeled className="shrink-0" />
+            <div className="min-w-0">
               <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">
                 {report.chain.name}
                 {report.chain.family &&
@@ -178,7 +184,7 @@ export function ReportView({ report }: { report: GuardianReport }) {
                   ? ` · ${report.chain.family}`
                   : ""}
               </p>
-              <CardTitle className="font-heading mt-1 text-2xl sm:text-3xl">
+              <CardTitle className="font-heading mt-1 text-2xl text-pretty break-words sm:text-3xl">
                 {report.token.name ?? "Unknown token"}{" "}
                 {report.token.symbol ? (
                   <span className="text-muted-foreground">${report.token.symbol}</span>
@@ -199,25 +205,27 @@ export function ReportView({ report }: { report: GuardianReport }) {
               {lpTier ? (
                 <p
                   className={cn(
-                    "mt-2 inline-flex items-center gap-1.5 text-sm font-medium",
+                    "mt-2 inline-flex max-w-full flex-wrap items-center gap-1.5 text-sm font-medium",
                     LOCK_TONE_CLASS[lockToneFromTier(lpTier, report.grade)],
                   )}
                 >
                   {lpTier === "UNVERIFIED" ? (
-                    <LockOpen className="size-4" aria-hidden />
+                    <LockOpen className="size-4 shrink-0" aria-hidden />
                   ) : (
-                    <Lock className="size-4" aria-hidden />
+                    <Lock className="size-4 shrink-0" aria-hidden />
                   )}
-                  LP {lpTier}
-                  {typeof report.lp?.lockedPct === "number"
-                    ? ` · ${Math.round(report.lp.lockedPct)}% locked`
-                    : null}
+                  <span className="break-words">
+                    LP {lpTier}
+                    {typeof report.lp?.lockedPct === "number"
+                      ? ` · ${Math.round(report.lp.lockedPct)}% locked`
+                      : null}
+                  </span>
                 </p>
               ) : null}
               <p className="mt-2 font-mono text-xs break-all text-muted-foreground">
                 {report.token.address}
               </p>
-              <p className="mt-3 max-w-xl text-sm text-foreground/80 capitalize">
+              <p className="mt-3 max-w-xl text-sm text-pretty break-words text-foreground/80 capitalize">
                 {report.headline}
               </p>
             </div>
@@ -226,23 +234,23 @@ export function ReportView({ report }: { report: GuardianReport }) {
             href={report.chain.explorerUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+            className="inline-flex min-h-11 items-center gap-1 text-xs text-primary hover:underline sm:min-h-0"
           >
             Explorer <ExternalLink className="size-3" />
           </a>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-muted-foreground">{report.disclaimer}</p>
+          <p className="text-xs text-pretty text-muted-foreground">{report.disclaimer}</p>
         </CardContent>
       </Card>
 
       {report.patterns.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex min-w-0 flex-wrap gap-2">
           {report.patterns.map((item) => (
             <Badge
               key={item.id}
               variant="outline"
-              className={cn("h-auto max-w-full py-1 whitespace-normal", SEVERITY[item.severity])}
+              className={cn("h-auto max-w-full py-1 text-pretty whitespace-normal", SEVERITY[item.severity])}
             >
               {item.title}
             </Badge>
@@ -252,18 +260,18 @@ export function ReportView({ report }: { report: GuardianReport }) {
         <p className="text-sm text-muted-foreground">No extra patterns beyond the check table.</p>
       )}
 
-      <div className="grid gap-3">
+      <div className="grid min-w-0 gap-3">
         {report.checks.map((item) => (
           <CheckCard key={item.id} item={item} lpTier={lpTier} />
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
+      <div className="grid min-w-0 gap-4 lg:grid-cols-2">
+        <Card className="min-w-0 overflow-hidden">
           <CardHeader>
             <CardTitle>Top holders</CardTitle>
             {concentration ? (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-pretty text-muted-foreground">
                 Top 10 hold {formatPct(concentration.rawTop10)} raw ·{" "}
                 {formatPct(concentration.adjustedTop10)} excluding locked &amp; LP
                 {concentration.excludedPct > 0
@@ -272,15 +280,15 @@ export function ReportView({ report }: { report: GuardianReport }) {
               </p>
             ) : null}
           </CardHeader>
-          <CardContent>
+          <CardContent className="min-w-0">
             {report.holders.length ? (
               <ul className="space-y-2">
                 {report.holders.map((holder, index) => (
                   <li
                     key={`${holder.address}-${index}`}
-                    className="flex items-center justify-between gap-3 text-sm"
+                    className="flex min-w-0 items-center justify-between gap-3 text-sm"
                   >
-                    <span className="min-w-0 text-xs text-muted-foreground">
+                    <span className="min-w-0 truncate text-xs text-muted-foreground">
                       {holder.tag ? (
                         <>
                           <span className="text-foreground/90">{holder.tag}</span>
@@ -293,7 +301,7 @@ export function ReportView({ report }: { report: GuardianReport }) {
                         <span className="font-mono">{shorten(holder.address || "unknown", 5)}</span>
                       )}
                     </span>
-                    <span>{formatPct(holder.percent)}</span>
+                    <span className="shrink-0 tabular-nums">{formatPct(holder.percent)}</span>
                   </li>
                 ))}
               </ul>
@@ -303,20 +311,20 @@ export function ReportView({ report }: { report: GuardianReport }) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="min-w-0 overflow-hidden">
           <CardHeader>
             <CardTitle>Pools</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="min-w-0">
             {report.pools.length ? (
               <ul className="space-y-2">
                 {report.pools.map((pool) => (
-                  <li key={pool.pairAddress} className="text-sm">
-                    <div className="flex items-center justify-between gap-2">
-                      <span>
+                  <li key={pool.pairAddress} className="min-w-0 text-sm">
+                    <div className="flex min-w-0 items-center justify-between gap-2">
+                      <span className="min-w-0 truncate">
                         {pool.dex} / {pool.quote}
                       </span>
-                      <span>{formatUsd(pool.liquidityUsd)}</span>
+                      <span className="shrink-0 tabular-nums">{formatUsd(pool.liquidityUsd)}</span>
                     </div>
                     <p className="text-xs text-muted-foreground">{formatAge(pool.createdAt)}</p>
                   </li>
@@ -329,36 +337,43 @@ export function ReportView({ report }: { report: GuardianReport }) {
         </Card>
       </div>
 
-      <Card>
+      <Card className="min-w-0 overflow-hidden">
         <CardHeader>
           <CardTitle>Same-ticker copies</CardTitle>
         </CardHeader>
-        <CardContent>
-          {report.copycats.length ? (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[32rem] text-left text-sm">
+        <CardContent className="min-w-0">
+          {copycatsWithData.length ? (
+            <div className="max-w-full min-w-0 overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch]">
+              <table className="w-full min-w-0 table-fixed text-left text-sm sm:min-w-[32rem] sm:table-auto">
                 <thead className="text-xs text-muted-foreground">
                   <tr>
-                    <th className="pb-2 font-medium">Token</th>
-                    <th className="pb-2 font-medium">DEX</th>
-                    <th className="pb-2 font-medium">Liquidity</th>
-                    <th className="pb-2 font-medium">Age</th>
-                    <th className="pb-2 font-medium">Flag</th>
+                    <th className="w-[40%] pb-2 pr-2 font-medium sm:w-auto">Token</th>
+                    <th className="hidden pb-2 pr-2 font-medium sm:table-cell">DEX</th>
+                    <th className="w-[22%] pb-2 pr-2 font-medium sm:w-auto">Liquidity</th>
+                    <th className="w-[18%] pb-2 pr-2 font-medium sm:w-auto">Age</th>
+                    <th className="w-[20%] pb-2 font-medium sm:w-auto">Flag</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {report.copycats.map((row) => (
+                  {copycatsWithData.map((row) => (
                     <tr key={row.address} className="border-t border-border/60">
-                      <td className="py-2">
-                        <div>{row.name ?? row.symbol}</div>
+                      <td className="py-2 pr-2 align-top">
+                        <div className="break-words">{row.name ?? row.symbol}</div>
                         <div className="font-mono text-xs text-muted-foreground">
                           {shorten(row.address, 6)}
                         </div>
+                        <div className="mt-0.5 text-xs break-words text-muted-foreground sm:hidden">
+                          {row.dex ?? "—"}
+                        </div>
                       </td>
-                      <td>{row.dex ?? "—"}</td>
-                      <td>{formatUsd(row.liquidityUsd)}</td>
-                      <td>{formatAge(row.createdAt)}</td>
-                      <td className="space-x-1">
+                      <td className="hidden py-2 pr-2 align-top sm:table-cell">{row.dex ?? "—"}</td>
+                      <td className="py-2 pr-2 align-top whitespace-nowrap tabular-nums">
+                        {formatUsd(row.liquidityUsd)}
+                      </td>
+                      <td className="py-2 pr-2 align-top whitespace-nowrap">
+                        {formatAge(row.createdAt)}
+                      </td>
+                      <td className="space-x-1 py-2 align-top">
                         {row.flags
                           .filter((flag) => flag !== "same-chain")
                           .map((flag) => (
@@ -372,6 +387,8 @@ export function ReportView({ report }: { report: GuardianReport }) {
                 </tbody>
               </table>
             </div>
+          ) : report.copycats.length ? (
+            <EmptyNote text="No data yet" />
           ) : (
             <EmptyNote text="No same-ticker copies in the search window." />
           )}
