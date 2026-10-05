@@ -29,7 +29,7 @@ const BUY_LABEL = "Get Guardian Verified \u2014 $25";
 /**
  * Report action row (every graded report):
  * - Always show Get Verified → /order?mint=… (or qualify checkoutUrl when eligible)
- * - Qualifying + unissued → gold buy emphasis ($25)
+ * - Qualifying + unissued → navy accent buy emphasis ($25)
  * - Already badged → Share leads; Get Verified hidden (verify via Share / seal)
  * - Non-qualifying → Get Verified still visible (order page explains gate)
  */
@@ -84,7 +84,7 @@ export function ReportActionBar({
         buttonVariants({ variant: qualifyingBuy ? "default" : "outline" }),
         "inline-flex h-11 min-h-11 w-full items-center justify-center rounded-xl px-4 text-xs font-semibold no-underline sm:w-auto",
         qualifyingBuy
-          ? "border border-[#c9a227]/40 bg-[#c9a227] text-[#0b1210] hover:bg-[#d4b03a]"
+          ? "border border-[#8FB0DE]/40 bg-[#8FB0DE] text-[#0A162F] hover:bg-[#9dbbe3]"
           : "border-border bg-secondary/40 text-foreground hover:bg-secondary/70",
       )}
     >
