@@ -84,37 +84,38 @@
 }
 
 .dark {
-  --background: oklch(0.16 0.018 155);
-  --foreground: oklch(0.93 0.02 95);
-  --card: oklch(0.2 0.02 155);
-  --card-foreground: oklch(0.93 0.02 95);
-  --popover: oklch(0.2 0.02 155);
-  --popover-foreground: oklch(0.93 0.02 95);
-  --primary: oklch(0.8 0.09 92);
-  --primary-foreground: oklch(0.22 0.03 92);
-  --secondary: oklch(0.24 0.02 155);
-  --secondary-foreground: oklch(0.93 0.02 95);
-  --muted: oklch(0.24 0.02 155);
-  --muted-foreground: oklch(0.74 0.03 150);
-  --accent: oklch(0.26 0.025 155);
-  --accent-foreground: oklch(0.93 0.02 95);
+  /* Cyre navy — match cyre.dev. Green is status-only, never brand. */
+  --background: #0a162f;
+  --foreground: #ece8df;
+  --card: #121c2b;
+  --card-foreground: #ece8df;
+  --popover: #121c2b;
+  --popover-foreground: #ece8df;
+  --primary: #8fb0de;
+  --primary-foreground: #0a162f;
+  --secondary: #152031;
+  --secondary-foreground: #ece8df;
+  --muted: #152031;
+  --muted-foreground: #9aa5b4;
+  --accent: #8fb0de;
+  --accent-foreground: #0a162f;
   --destructive: oklch(0.68 0.17 28);
-  --border: oklch(0.32 0.02 155);
-  --input: oklch(0.32 0.02 155);
-  --ring: oklch(0.8 0.09 92);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: #243246;
+  --input: #243246;
+  --ring: #8fb0de;
+  --chart-1: #8fb0de;
+  --chart-2: #9aa5b4;
+  --chart-3: #243246;
+  --chart-4: #0e1a38;
+  --chart-5: #0a162f;
+  --sidebar: #121c2b;
+  --sidebar-foreground: #ece8df;
+  --sidebar-primary: #8fb0de;
+  --sidebar-primary-foreground: #0a162f;
+  --sidebar-accent: #152031;
+  --sidebar-accent-foreground: #ece8df;
+  --sidebar-border: #243246;
+  --sidebar-ring: #8fb0de;
 }
 
 @layer base {
@@ -130,11 +131,32 @@
     @apply bg-background text-foreground;
     overflow-x: clip;
     max-width: 100%;
+    background-color: #0a162f;
     background-image:
-      radial-gradient(1200px 560px at 8% -12%, oklch(0.3 0.05 155 / 0.55), transparent 55%),
-      radial-gradient(900px 420px at 100% 0%, oklch(0.34 0.06 92 / 0.14), transparent 45%);
+      radial-gradient(1200px 560px at 8% -12%, #0e1a38 0%, transparent 58%),
+      radial-gradient(900px 420px at 100% 0%, rgb(143 176 222 / 0.16), transparent 48%);
     background-attachment: fixed;
   }
+}
+
+@keyframes cy-logo-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgb(143 176 222 / 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgb(143 176 222 / 0.7));
+  }
+}
+
+.cyre-mark {
+  animation: cy-logo-glow 2.8s ease-in-out infinite;
+}
+
+.grade-a-tile {
+  border-color: rgb(143 176 222 / 0.45);
+  background: rgb(143 176 222 / 0.1);
+  color: #8fb0de;
 }
 
 /**

@@ -190,7 +190,7 @@ export function ReportView({ report }: { report: GuardianReport }) {
                   <span className="text-muted-foreground">${report.token.symbol}</span>
                 ) : null}
               </CardTitle>
-              <p className="mt-1 text-sm" style={{ color: gradeAccent }}>
+              <p className="mt-1 text-sm" style={{ color: report.grade === "A" ? "#8FB0DE" : gradeAccent }}>
                 Grade {report.grade}
                 <span className="text-muted-foreground"> · composite {report.score}/100</span>
               </p>

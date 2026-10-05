@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -15,10 +14,15 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 text-foreground">
-          <span className="flex size-8 items-center justify-center rounded-md border border-primary/40 bg-primary/10 text-primary">
-            <Shield className="size-4" />
-          </span>
+        <Link href="/" className="flex items-center gap-2 text-foreground" aria-label="Cyre home">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/cyre-mark.png"
+            alt=""
+            width={32}
+            height={32}
+            className="cyre-mark size-8"
+          />
           <span className="font-heading text-lg tracking-tight">Cyre</span>
           <span className="hidden text-xs tracking-[0.18em] text-muted-foreground uppercase sm:inline">
             Multichain Scan
