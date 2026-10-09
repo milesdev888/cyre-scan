@@ -153,6 +153,12 @@
   animation: cy-logo-glow 2.8s ease-in-out infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .cyre-mark {
+    animation: none;
+  }
+}
+
 .grade-a-tile {
   border-color: rgb(143 176 222 / 0.45);
   background: rgb(143 176 222 / 0.1);

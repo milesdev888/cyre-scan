@@ -156,13 +156,7 @@ function CheckCard({ item, lpTier }: { item: Check; lpTier?: LpTier | null }) {
   );
 }
 
-/** Rows with no DEX / liquidity / age render as "— — unknown age" — hide them. */
-function copycatHasData(row: GuardianReport["copycats"][number]) {
-  return row.dex != null || row.liquidityUsd != null || row.createdAt != null;
-}
-
 export function ReportView({ report }: { report: GuardianReport }) {
-  const copycatsWithData = report.copycats.filter(copycatHasData);
   const concentration = report.concentration;
   const lpTier = report.lp?.tier ?? null;
   const ageDays = readAgeDays(report.checks);
@@ -342,7 +336,7 @@ export function ReportView({ report }: { report: GuardianReport }) {
           <CardTitle>Same-ticker copies</CardTitle>
         </CardHeader>
         <CardContent className="min-w-0">
-          {copycatsWithData.length ? (
+          {report.copycats.length ? (
             <div className="max-w-full min-w-0 overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch]">
               <table className="w-full min-w-0 table-fixed text-left text-sm sm:min-w-[32rem] sm:table-auto">
                 <thead className="text-xs text-muted-foreground">
@@ -355,7 +349,7 @@ export function ReportView({ report }: { report: GuardianReport }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {copycatsWithData.map((row) => (
+                  {report.copycats.map((row) => (
                     <tr key={row.address} className="border-t border-border/60">
                       <td className="py-2 pr-2 align-top">
                         <div className="break-words">{row.name ?? row.symbol}</div>
@@ -387,8 +381,6 @@ export function ReportView({ report }: { report: GuardianReport }) {
                 </tbody>
               </table>
             </div>
-          ) : report.copycats.length ? (
-            <EmptyNote text="No data yet" />
           ) : (
             <EmptyNote text="No same-ticker copies in the search window." />
           )}
