@@ -45,3 +45,9 @@ x402 agent routes:
 Live on Render: [guardian-scan.onrender.com](https://guardian-scan.onrender.com)
 
 Source: [github.com/milesdev888/guardian-scan](https://github.com/milesdev888/guardian-scan)
+
+## License
+
+Copyright © 2026 Cyre. All rights reserved except as licensed below.
+
+This repository is **source-available** under the [Business Source License 1.1](./LICENSE). Non-production evaluation and testing are permitted; production or commercial use requires a commercial license from Cyre until the Change Date (2030-10-17), after which the code becomes available under MIT. Contact hello@cyre.dev for licensing.
